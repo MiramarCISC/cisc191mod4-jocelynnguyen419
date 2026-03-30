@@ -32,6 +32,9 @@ public class DatabaseInitializer {
                         )
                     """);
 
+            stmt.execute("DELETE FROM courses");
+            stmt.execute("DELETE FROM students");
+
         } catch (Exception e) {
             e.printStackTrace();
 
