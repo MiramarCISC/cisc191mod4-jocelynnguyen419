@@ -31,7 +31,7 @@ public class JdbcCourseRepository implements CourseRepository {
     public List<Course> findByStudentId(int studentId) {
         // TODO query courses by student_id and map to List<Course>
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT * FROM courses WHERE student_id = ?";
+        String sql = "SELECT * FROM courses WHERE student_id = ? ORDER BY id";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -58,7 +58,7 @@ public class JdbcCourseRepository implements CourseRepository {
     public List<Course> findAll() {
         // TODO query all rows and map to List<Course>
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT * FROM courses";
+        String sql = "SELECT * FROM courses ORDER BY id";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
