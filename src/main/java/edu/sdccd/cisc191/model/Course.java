@@ -28,7 +28,7 @@ public class Course {
 
     public int getStudentId() {
         // TODO
-        return id;
+        return studentId;
     }
 
     @Override
