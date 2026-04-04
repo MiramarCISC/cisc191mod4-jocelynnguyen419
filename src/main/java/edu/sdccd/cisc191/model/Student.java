@@ -33,8 +33,8 @@ public class Student {
     }
 
     public void setGpa(double gpa) {
-        if (name == null || name.isBlank()) throw new IllegalArgumentException("Name required");
-        this.name = name;
+        if (gpa < 0.0 || gpa > 4.0) throw new IllegalArgumentException("Invalid GPA");
+        this.gpa = gpa;
     }
 
     @Override
