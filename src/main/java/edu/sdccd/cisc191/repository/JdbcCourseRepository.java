@@ -11,7 +11,6 @@ public class JdbcCourseRepository implements CourseRepository {
 
     @Override
     public void save(Course course) {
-        // TODO use PreparedStatement INSERT
         String sql = "INSERT INTO courses (id, title, student_id) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -23,13 +22,12 @@ public class JdbcCourseRepository implements CourseRepository {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public List<Course> findByStudentId(int studentId) {
-        // TODO query courses by student_id and map to List<Course>
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM courses WHERE student_id = ? ORDER BY id";
 
@@ -48,7 +46,7 @@ public class JdbcCourseRepository implements CourseRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return courses;
@@ -56,7 +54,6 @@ public class JdbcCourseRepository implements CourseRepository {
 
     @Override
     public List<Course> findAll() {
-        // TODO query all rows and map to List<Course>
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM courses ORDER BY id";
 
@@ -73,7 +70,7 @@ public class JdbcCourseRepository implements CourseRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return courses;
@@ -81,3 +78,4 @@ public class JdbcCourseRepository implements CourseRepository {
 }
 
 // copied og before deleting everything and pasting back because indents were weird/not lining up..
+// thats ok!

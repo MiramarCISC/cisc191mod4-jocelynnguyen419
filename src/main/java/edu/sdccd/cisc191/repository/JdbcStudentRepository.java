@@ -11,7 +11,6 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public void save(Student student) {
-        // TODO use PreparedStatement INSERT
         String sql = "INSERT INTO students (id, name, gpa) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -23,18 +22,18 @@ public class JdbcStudentRepository implements StudentRepository {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Student findById(int id) {
-        // TODO use PreparedStatement SELECT by id
         String sql = "SELECT * FROM students WHERE id = ?";
 
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            // Statements don't need to be closed.
+            // Try to reduce how much of the try-with-resources statement is inside the parentheses for clarity
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -47,7 +46,7 @@ public class JdbcStudentRepository implements StudentRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return null;
@@ -55,13 +54,12 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public List<Student> findAll() {
-        // TODO query all rows and map to List<Student>
         List<Student> students = new ArrayList<>();
         String sql = "SELECT * FROM students";
 
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 students.add(new Student(
@@ -72,7 +70,7 @@ public class JdbcStudentRepository implements StudentRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return students;
@@ -80,34 +78,32 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public void updateGpa(int id, double newGpa) {
-        // TODO use PreparedStatement UPDATE
         String sql = "UPDATE students SET gpa = ? WHERE id = ?";
 
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setDouble(1, newGpa);
             stmt.setInt(2, id);
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deleteById(int id) {
-        // TODO use PreparedStatement DELETE
         String sql = "DELETE FROM students WHERE id = ?";
 
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
