@@ -32,12 +32,12 @@ public class DatabaseInitializer {
                         )
                     """);
 
-            stmt.execute("DELETE FROM courses");
-            stmt.execute("DELETE FROM students");
+            // Init should NOT wipe the database.
+            // stmt.execute("DELETE FROM courses");
+            // stmt.execute("DELETE FROM students");
 
         } catch (Exception e) {
-            e.printStackTrace();
-
+            throw new RuntimeException(e);
         }
     }
 }
